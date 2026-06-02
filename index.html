@@ -5,101 +5,113 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>今天你觉醒了吗</title>
   <style>
-    * {
-      box-sizing: border-box;
-    }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
-      background: #f6f2ea;
-      color: #222;
-    }
 
-    .page {
-      width: min(92vw, 680px);
-      padding: 24px;
-    }
+* {
+  box-sizing: border-box;
+}
 
-    .card {
-      background: #fff;
-      border: 1px solid #eadfce;
-      border-radius: 24px;
-      padding: 36px 28px;
-      box-shadow: 0 18px 45px rgba(0, 0, 0, 0.08);
-      text-align: center;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: #f4edff;
+  color: #2d2140;
+}
 
-    .eyebrow {
-      margin-bottom: 14px;
-      color: #8a6a3f;
-      font-size: 14px;
-      letter-spacing: 0.08em;
-    }
+.page {
+  width: min(92vw, 680px);
+  padding: 24px;
+}
 
-    #question {
-      min-height: 88px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      white-space: pre-line;
-      font-size: clamp(24px, 5vw, 40px);
-      font-weight: 700;
-      line-height: 1.35;
-    }
+.card {
+  background: #fffaff;
+  border: 1px solid #e1d2ff;
+  border-radius: 24px;
+  padding: 36px 28px;
+  box-shadow: 0 18px 45px rgba(113, 68, 160, 0.12);
+  text-align: center;
+}
 
-    #options {
-      display: flex;
-      gap: 16px;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-top: 30px;
-    }
+.eyebrow {
+  margin-bottom: 14px;
+  color: #7d4bb3;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
 
-    button {
-      border: 0;
-      border-radius: 999px;
-      padding: 14px 30px;
-      font-size: 18px;
-      cursor: pointer;
-      background: #f3d7a6;
-      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
-    }
+#question {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre-line;
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 700;
+  line-height: 1.35;
+}
 
-    button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
-      background: #edc986;
-    }
+#options {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
 
-    .secondary {
-      background: #eeeeee;
-      font-size: 15px;
-      padding: 10px 18px;
-    }
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  background: #dcc7ff;
+  color: #2d2140;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
 
-    .secondary:hover {
-      background: #e0e0e0;
-    }
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(113, 68, 160, 0.18);
+  background: #cdb0ff;
+}
 
-    .toolbar {
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-      margin-top: 22px;
-    }
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
 
-    .path {
-      margin-top: 20px;
-      color: #777;
-      font-size: 13px;
-      line-height: 1.6;
-      word-break: break-word;
-    }
+.secondary {
+  background: #eee6fa;
+  font-size: 15px;
+  padding: 10px 18px;
+}
+
+.secondary:hover {
+  background: #e2d4f7;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.path {
+  margin-top: 20px;
+  color: #7d6b91;
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+
   </style>
 </head>
 <body>
@@ -119,136 +131,162 @@
   <script>
     // 核心：把每一个框写成一个节点。
     // text 是这一页显示的问题或结果；options 是按钮；next 指向下一个节点的 id。
-    const FLOW = {
-      start: {
-        text: "你是女性吗？",
-        options: [
-          { label: "是", next: "straight" },
-          { label: "不是", next: "maleEnd" }
-        ]
-      },
+const FLOW = {
+  start: {
+    text: "你是女性吗？",
+    options: [
+      { label: "是", next: "straight" },
+      { label: "不是", next: "maleEnd" }
+    ]
+  },
 
-      maleEnd: {
-        text: "臭公狗路边一条",
-        options: []
-      },
+  maleEnd: {
+    text: "臭公狗路边一条",
+    options: []
+  },
 
-      straight: {
-        text: "你是直女吗？",
-        options: [
-          { label: "是", next: "love" },
-          { label: "不是", next: "important" }
-        ]
-      },
+  straight: {
+    text: "你是直女吗？",
+    options: [
+      { label: "是", next: "love" },
+      { label: "这重要吗", next: "likeFemaleCharacter" }
+    ]
+  },
 
-      love: {
-        text: "谈过恋爱吗？",
-        options: [
-          { label: "是", next: "endA" },
-          { label: "否", next: "endB" }
-        ]
-      },
+  love: {
+    text: "谈过恋爱吗？",
+    options: [
+      { label: "是", next: "loveYesOptions" },
+      { label: "否", next: "endNoLove" }
+    ]
+  },
 
-      important: {
-        text: "这重要吗？",
-        options: [
-          { label: "是", next: "likeFemaleCharacter" },
-          { label: "否", next: "endB" }
-        ]
-      },
+  loveYesOptions: {
+    text: "请选择你的情况",
+    options: [
+      { label: "没结婚", next: "endNoMarriage" },
+      { label: "结婚未生子", next: "endMarriedNoChild" },
+      { label: "结婚生子", next: "endMarriedWithChild" }
+    ]
+  },
 
-      likeFemaleCharacter: {
-        text: "你喜欢女角色吗？",
-        options: [
-          { label: "是", next: "ironT" },
-          { label: "否", next: "endB" }
-        ]
-      },
+  likeFemaleCharacter: {
+    text: "你喜欢女角色吗？",
+    options: [
+      { label: "是", next: "ironT" },
+      { label: "否", next: "endB" }
+    ]
+  },
 
-      ironT: {
-        text: "这个角色的风格是铁T吗？",
-        options: [
-          { label: "是", next: "bg" },
-          { label: "否", next: "endWeak" }
-        ]
-      },
+  ironT: {
+    text: "这个角色的风格是铁T吗？",
+    options: [
+      { label: "是", next: "bg" },
+      { label: "否", next: "endWeak" }
+    ]
+  },
 
-      bg: {
-        text: "磕她的 BG CP / CB 吗？",
-        options: [
-          { label: "是", next: "endSkin" },
-          { label: "否", next: "gb" }
-        ]
-      },
+  bg: {
+    text: "磕她的 BG CP / CB 吗？",
+    options: [
+      { label: "是", next: "endSkinWeak" },
+      { label: "否", next: "gb" }
+    ]
+  },
 
-      gb: {
-        text: "磕她的 GB CP / CB 吗？",
-        options: [
-          { label: "是", next: "endC" },
-          { label: "否", next: "gl" }
-        ]
-      },
+  gb: {
+    text: "磕她的 GB CP / CB 吗？",
+    options: [
+      { label: "是", next: "endC" },
+      { label: "否", next: "gl" }
+    ]
+  },
 
-      gl: {
-        text: "磕她的 GL CP / CB 吗？",
-        options: [
-          { label: "是", next: "endD" },
-          { label: "否", next: "femaleFeature" }
-        ]
-      },
+  gl: {
+    text: "磕她的 GL CP / CB 吗？",
+    options: [
+      { label: "是", next: "glYesOptions" },
+      { label: "否", next: "femaleFeature" }
+    ]
+  },
 
-      femaleFeature: {
-        text: "你喜欢她的女性生理特征吗？",
-        options: [
-          { label: "是", next: "endFreedom" },
-          { label: "否", next: "endCongrats" }
-        ]
-      },
+  glYesOptions: {
+    text: "你怎么磕她的 GL CP / CB？",
+    options: [
+      { label: "磕她左位", next: "endGlLeft" },
+      { label: "磕她右位", next: "endSkinWeak" },
+      { label: "杂食", next: "endMixed" }
+    ]
+  },
 
-      endA: {
-        text: "这里写图中左下角的结果文案",
-        options: []
-      },
+  femaleFeature: {
+    text: "你喜欢她的女性生理特征吗？",
+    options: [
+      { label: "是", next: "endFreedom" },
+      { label: "否", next: "endCongrats" }
+    ]
+  },
 
-      endB: {
-        text: "爱男解",
-        options: []
-      },
+  endNoMarriage: {
+    text: "沾男",
+    options: []
+  },
 
-      endWeak: {
-        text: "弱化女性",
-        options: [
-          { label: "继续", next: "endSkin" }
-        ]
-      },
+  endMarriedNoChild: {
+    text: "沾男婚驴",
+    options: []
+  },
 
-      endSkin: {
-        text: "当皮套穿走了",
-        options: []
-      },
+  endMarriedWithChild: {
+    text: "敌方坐骑",
+    options: []
+  },
 
-      endC: {
-        text: "男嬷",
-        options: []
-      },
+  endNoLove: {
+    text: "渴男处驴",
+    options: []
+  },
 
-      endD: {
-        text: "这里写图中右侧长方框的结果文案",
-        options: [
-          { label: "继续", next: "endSkin" }
-        ]
-      },
+  endB: {
+    text: "爱男解",
+    options: []
+  },
 
-      endFreedom: {
-        text: "向下的自由不是自由！",
-        options: []
-      },
+  endWeak: {
+    text: "弱化女性",
+    options: []
+  },
 
-      endCongrats: {
-        text: "恭喜！\n这里写最终结果文案。",
-        options: []
-      }
-    };
+  endSkinWeak: {
+    text: "皮套解弱化女性",
+    options: []
+  },
+
+  endC: {
+    text: "男嬷",
+    options: []
+  },
+
+  endGlLeft: {
+    text: "渴男解yy女角色当代餐",
+    options: []
+  },
+
+  endMixed: {
+    text: "杂食路边一条",
+    options: []
+  },
+
+  endFreedom: {
+    text: "向下的自由不是自由！",
+    options: []
+  },
+
+  endCongrats: {
+    text: "恭喜！\n虽然你既不喜欢女角色穿的像女人，也不喜欢女角色长得像女人，还不能接受她和其他角色有很多互动\n但是你才是真正的爱女达人！\n快去换属于你的紫色头像吧！",
+    options: []
+  }
+};
 
     let currentId = "start";
     const historyStack = [];
@@ -262,6 +300,7 @@
 
     function render() {
       const node = FLOW[currentId];
+
       questionEl.textContent = node.text;
       optionsEl.innerHTML = "";
 
