@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>妗𡛌妳奸𡟙姈妈</title>
+  <style>
+
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+  background: #f4edff;
+  color: #2d2140;
+}
+
+.page {
+  width: min(92vw, 680px);
+  padding: 24px;
+}
+
+.card {
+  background: #fffaff;
+  border: 1px solid #e1d2ff;
+  border-radius: 24px;
+  padding: 36px 28px;
+  box-shadow: 0 18px 45px rgba(113, 68, 160, 0.12);
+  text-align: center;
+}
+
+.eyebrow {
+  margin-bottom: 14px;
+  color: #7d4bb3;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+}
+
+#question {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: pre-line;
+  font-size: clamp(24px, 5vw, 40px);
+  font-weight: 700;
+  line-height: 1.35;
+}
+
+#options {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 30px;
+}
+
+button {
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 30px;
+  font-size: 18px;
+  cursor: pointer;
+  background: #dcc7ff;
+  color: #2d2140;
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(113, 68, 160, 0.18);
+  background: #cdb0ff;
+}
+
+button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  transform: none;
+  box-shadow: none;
+}
+
+.secondary {
+  background: #eee6fa;
+  font-size: 15px;
+  padding: 10px 18px;
+}
+
+.secondary:hover {
+  background: #e2d4f7;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.path {
+  margin-top: 20px;
+  color: #7d6b91;
+  font-size: 13px;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="card">
+      <div class="eyebrow">妗𡛌妳奸𡟙姈妈</div>
+      <div id="question"></div>
+      <div id="options"></div>
+      <div class="toolbar">
+        <button class="secondary" id="backBtn">𪥤一𡝃</button>
+        <button class="secondary" id="restartBtn">媑媇妍始</button>
+      </div>
+      <div class="path" id="path"></div>
+    </section>
+  </main>
+
+  <script>
+    // 核心：把每一个框写成一个节点。
+    // text 是这一页显示的问题或结果；options 是按钮；next 指向下一个节点的 id。
+const FLOW = {
+  start: {
+    text: "妳媞女𢖵妈？",
+    options: [
+      { label: "媞", next: "straight" },
+      { label: "妚媞", next: "maleEnd" }
+    ]
+  },
+
+  maleEnd: {
+    text: "𫰋妐姁娽𰋶𱙁𡠊",
+    options: []
+  },
+
+  straight: {
+    text: "妳媞𰌈女妈？",
+    options: [
+      { label: "媞", next: "love" },
+      { label: "妏媑要妈", next: "likeFemaleCharacter" }
+    ]
+  },
+
+  love: {
+    text: "婒妫𱙥嫒妈？",
+    options: [
+      { label: "媞", next: "loveYesOptions" },
+      { label: "如", next: "endNoLove" }
+    ]
+  },
+
+  loveYesOptions: {
+    text: "婧姺嫧妳妁婧㚾",
+    options: [
+      { label: "𡚾姞婚", next: "endNoMarriage" },
+      { label: "姞婚妹姓好", next: "endMarriedNoChild" },
+      { label: "姞婚姓好", next: "endMarriedWithChild" }
+    ]
+  },
+
+  likeFemaleCharacter: {
+    text: "妳嬉奴女孂𡜆妈？",
+    options: [
+      { label: "媞", next: "ironT" },
+      { label: "如", next: "endB" }
+    ]
+  },
+
+  ironT: {
+    text: "妏𡟍孂𡜆妁㚯𡟍媞妷T妈？",
+    options: [
+      { label: "媞", next: "bg" },
+      { label: "如", next: "endWeak" }
+    ]
+  },
+
+  bg: {
+    text: "娔她妁 BG CP / CB 妈？",
+    options: [
+      { label: "媞", next: "endSkinWeak" },
+      { label: "如", next: "gb" }
+    ]
+  },
+
+  gb: {
+    text: "娔她妁 GB CP / CB 妈？",
+    options: [
+      { label: "媞", next: "endC" },
+      { label: "如", next: "gl" }
+    ]
+  },
+
+  gl: {
+    text: "娔她妁 GL CP / CB 妈？",
+    options: [
+      { label: "媞", next: "glYesOptions" },
+      { label: "如", next: "femaleFeature" }
+    ]
+  },
+
+  glYesOptions: {
+    text: "妳妰𡚸娔她妁 GL CP / CB？",
+    options: [
+      { label: "娔她𡛿妾", next: "endGlLeft" },
+      { label: "娔她𡛮妾", next: "endSkinWeak" },
+      { label: "𡚪姼", next: "endMixed" }
+    ]
+  },
+
+  femaleFeature: {
+    text: "妳嬉奴她妁女𢖵姓娌她姃妈？",
+    options: [
+      { label: "媞", next: "endFreedom" },
+      { label: "如", next: "endCongrats" }
+    ]
+  },
+
+  endNoMarriage: {
+    text: "㚲娚",
+    options: []
+  },
+
+  endMarriedNoChild: {
+    text: "㚲娚婚妒",
+    options: []
+  },
+
+  endMarriedWithChild: {
+    text: "姡妨㛗婍",
+    options: []
+  },
+
+  endNoLove: {
+    text: "𫱊娚𭑧妒",
+    options: []
+  },
+
+  endB: {
+    text: "嫒娚姐",
+    options: []
+  },
+
+  endWeak: {
+    text: "嫋𡚨女𢖵",
+    options: []
+  },
+
+  endSkinWeak: {
+    text: "𡛡嫍姐嫋𡚨女𢖵",
+    options: []
+  },
+
+  endC: {
+    text: "娚嬷",
+    options: []
+  },
+
+  endGlLeft: {
+    text: "𫱊娚姐yy女孂𡜆𫰠㚤㛑",
+    options: []
+  },
+
+  endMixed: {
+    text: "𡚪姼娽𰋶𱙁𡠊",
+    options: []
+  },
+
+  endFreedom: {
+    text: "姠𫰈妁𡜍妯妚媞𡜍妯！",
+    options: []
+  },
+
+  endCongrats: {
+    text: "娂嬉！\n如㜣妳𡠣妚嬉奴女孂𡜆𫰎妁姠女妊，她妚嬉奴女孂𡜆嫜奵姠女妊，妚妚𱙦𡞘𲛖她姀娸她孂𡜆姷好姼𪥦妘\n妲媞妳婇媞嫃姃妁嫒女𡚻妊！\n妜𡉓㛟𡜢㚥妳妁姕𡜆妵姠妑！",
+    options: []
+  }
+};
+
+    let currentId = "start";
+    const historyStack = [];
+    const answerPath = [];
+
+    const questionEl = document.querySelector("#question");
+    const optionsEl = document.querySelector("#options");
+    const pathEl = document.querySelector("#path");
+    const backBtn = document.querySelector("#backBtn");
+    const restartBtn = document.querySelector("#restartBtn");
+
+    function render() {
+      const node = FLOW[currentId];
+
+      questionEl.textContent = node.text;
+      optionsEl.innerHTML = "";
+
+      node.options.forEach((option) => {
+        const btn = document.createElement("button");
+        btn.textContent = option.label;
+        btn.addEventListener("click", () => choose(option));
+        optionsEl.appendChild(btn);
+      });
+
+      if (node.options.length === 0) {
+        const btn = document.createElement("button");
+        btn.textContent = "再玩一次";
+        btn.addEventListener("click", restart);
+        optionsEl.appendChild(btn);
+      }
+
+      backBtn.disabled = historyStack.length === 0;
+      pathEl.textContent = answerPath.length ? `你的选择路径：${answerPath.join(" → ")}` : "";
+    }
+
+    function choose(option) {
+      historyStack.push(currentId);
+      answerPath.push(option.label);
+      currentId = option.next;
+      render();
+    }
+
+    function goBack() {
+      if (historyStack.length === 0) return;
+      currentId = historyStack.pop();
+      answerPath.pop();
+      render();
+    }
+
+    function restart() {
+      currentId = "start";
+      historyStack.length = 0;
+      answerPath.length = 0;
+      render();
+    }
+
+    backBtn.addEventListener("click", goBack);
+    restartBtn.addEventListener("click", restart);
+
+    render();
+  </script>
+</body>
+</html>
